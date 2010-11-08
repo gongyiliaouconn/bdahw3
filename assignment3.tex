@@ -1,0 +1,179 @@
+%%
+%% assignment3.tex
+%% 
+%% Made by GONG-YI LIAO
+%% Login   <gong-yi@GongTop>
+%% 
+%% Started on  Sat Nov  6 17:57:05 2010 GONG-YI LIAO
+%% Last update Sun Nov  7 18:55:15 2010 GONG-YI LIAO
+%%
+
+\documentclass[twoside,12pt]{amsart}
+
+\usepackage{bm,amssymb,amsmath}
+\usepackage{mathrsfs}
+\usepackage{graphicx}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{9.0in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\headheight}{15pt}
+\setlength{\headsep}{15pt}
+\setlength{\footskip}{25pt}
+\setlength{\parindent}{0.25in}
+\setlength{\parskip}{0pt} 
+
+\author{Gong-Yi Liao}
+\title{Assignment 3}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+\item
+  Consider the model that $(N_{j1}, N_{j2}, N_{j3})'\sim\mathcal
+  Multinomial(\bm p_j, N)$, $j=1,2$, $\bm p_j = (p_{j1}, p_{j2},
+  p_{j3})'$, $\sum_{i=1}^3p_{ji} = 1$. Apparently $\alpha_j =
+  \frac{p_{j1}}{p_{j1}+p_{j2}}$, 
+  where $p_{j1}$ denotes the probability that people prefer Bush at
+  poll time $j$, , $p_{j2}$ denotes the probability that peoples
+  prefer Dukakis at time $j$ and $p_{j3}$ denotes the probabiltiy that
+  neither candidates are not preferred by the people. 
+  
+\item
+\item
+\item
+  \begin{enumerate}
+  \item The posterior density of $\theta$ is:
+    \[ 
+y    \mathscr P(\bm y) = 
+    \int_{\mathbb R}\prod_{i=1}^n\pi^{-1}[1 +
+    (y_i-\theta)^2]^{-1}\pi(\theta)d\theta = \pi^{-n}\int_{\mathbb R}\prod_{i=1}^n[1 +
+    (\theta-y_i)^2]^{-1}d\theta 
+    \]
+    thus,
+    \[ 
+    \mathscr P(\theta|\bm y) \propto \frac{\prod_{i=1}^n[1 +
+    (y_i-\theta)^2]^{-1}}{\int_{\mathbb R}\prod_{i=1}^n[1 +
+    (\theta-y_i)^2]^{-1}d\theta}
+    \]
+
+    The corresponding {\tt R} code are:
+
+    \begin{small}
+    \begin{verbatim}
+## Last update Sat Nov  6 22:09:15 2010 GONG-YI LIAO
+
+require(MCMCpack)
+require(arm)
+require(R2jags)
+
+## Q4
+
+post.inte.two.sample <- function(theta, obs) {
+  def1 <- 1
+  ## the reason that we need to use the inefficient loop
+  ## is that the function integration needs the exact form
+  ## of the function, but, if we use "sum" or "prod" then the
+  ## exact form of function will be invisible to
+  ## the function "integration" and error will occur at the second
+  ## stage.
+  for (i in 1:length(obs))
+    def1 <- def1/(1+(theta - obs[i])^2)
+  def1
+}
+
+post.two.sample.cauchy <- function(theta, obs) {
+  norm.post.0 <- integrate(post.inte.two.sample, lower=-Inf, upper=Inf, 
+                           obs=obs)$value
+  post.inte.two.sample(theta, obs)/norm.post.0
+}
+
+logfun1 <- function(theta, obs) {
+  ## usage:
+  log(post.two.sample.cauchy(theta, obs))
+}
+
+post.mean.fun.1 <- function(theta, obs) {
+  theta*post.two.sample.cauchy(theta, obs)
+}
+      
+    \end{verbatim}
+    \end{small}
+  \item
+    \begin{enumerate}
+    \item
+      \[ 
+      \mathscr P\left(\theta|(1.5, 2.5)'\right) \propto \frac{[1 +
+        (1.5 - \theta)^2]^{-1}[1 +
+        (2.5 - \theta)^2]^{-1}}{\int_{\mathbb R}[1 +
+        (\theta - 1.5)^2]^{-1}[1 +
+        (\theta - 2.5)^2]^{-1}d\theta}
+      \]
+      and denominator can be computed numerically. This posterior
+      density is shown in Fig.\ref{fig:4-b-i}
+
+      \begin{figure}[h]
+        \includegraphics[scale=.5]{4-b-i.pdf}
+        \caption{The posterior density of $\theta$ conditional on $\bm
+          y = (1.5, 2.5)'$}\label{fig:4-b-i}
+      \end{figure}
+
+    \item
+      By using {\tt R}'s {\tt MCMCpack}'s {\tt MCMCMetrop1R} function,
+      we can obtain the posterior samples of $\theta$:      
+      \begin{verbatim}
+> ## Metropolis-Hasting sampled θ for y = (1.5, 2.5)
+> post.sample.b.ii <- MCMCmetrop1R(logfun1, theta.init=rnorm(1), 
++                                  thin=1, mcmc=40000, burnin=500, 
++                                  obs=c(1.5, 2.5), logfun=TRUE) 
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+The Metropolis acceptance rate was 0.72894
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+> 
+> mean(post.sample.b.ii)
+[1] 2.002400
+> var(post.sample.b.ii)
+         [,1]
+[1,] 1.015655
+> mean.nc <- integrate(post.mean.fun.1, lower=-Inf, upper=Inf, 
++                      obs=c(1.5, 2.5))$value
+> 
+> mean.nc
+[1] 2
+>         
+      \end{verbatim}
+
+      
+    \item
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    \item This posterior density is shown in Fig.\ref{fig:4-c-i}
+      \begin{figure}[h]
+        \includegraphics[scale=.5]{4-c-i.pdf}
+        \caption{The posterior density of $\theta$ conditional on $\bm
+          y = (-3, -2, 1.5, 2.5)'$}\label{fig:4-c-i}
+      \end{figure}
+    \item
+      We can obtain the results 
+
+    \item
+    \item
+    \end{enumerate}
+  \end{enumerate}
+\item
+\end{enumerate}
+
+\end{document}
+
+
+
+
+
+
+
+
