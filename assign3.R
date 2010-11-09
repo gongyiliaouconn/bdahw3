@@ -1,4 +1,4 @@
-## Last update Sat Nov  6 22:21:12 2010 GONG-YI LIAO
+## Last update Mon Nov  8 15:11:57 2010 GONG-YI LIAO
 
 require(MCMCpack)
 require(arm)
@@ -82,7 +82,7 @@ var(post.sample.c.ii)
 mean.nc <- integrate(post.mean.fun.1, lower=-Inf, upper=Inf, obs=c(-3, -2, 1.5, 2.5))$value
 
 ## plot for (4.b.ii)
-pdf("4-b-ii.pdf")
+pdf("4-c-ii.pdf")
 
 plot(seq(-9, 13, length=20000),
      post.two.sample.cauchy(seq(-9, 13, length=20000), obs=c(-3, -2, 1.5, 2.5)),
