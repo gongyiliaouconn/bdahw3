@@ -1,8 +1,23 @@
-## Last update Mon Nov  8 15:11:57 2010 GONG-YI LIAO
+## Last update Tue Nov  9 22:50:03 2010 GONG-YI LIAO
 
 require(MCMCpack)
 require(arm)
 require(R2jags)
+
+
+## Q1, q2 on page 95, BDA textbook
+
+ξ <- c(1,1,1)
+y1 <- c(294, 307, 38)
+y2 <- c(288, 332, 19)
+π.1 <- rdirichlet(10000, y1+ξ)
+π.2 <- rdirichlet(10000, y2+ξ)
+α.1 <- π.1[,1]/rowSums(π.1[,1:2])
+α.2 <- π.2[,1]/rowSums(π.2[,1:2])
+pdf("1-1.pdf")
+hist(α.2 - α.1, prob=TRUE, main=expression("Histogram of " * alpha[2] - alpha[1]), xlab=expression(alpha[2] - alpha[1]))
+lines(density(α.2 - α.1), type="l", col="red")
+dev.off()
 
 ## Q4
 

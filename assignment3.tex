@@ -5,7 +5,7 @@
 %% Login   <gong-yi@GongTop>
 %% 
 %% Started on  Sat Nov  6 17:57:05 2010 GONG-YI LIAO
-%% Last update Mon Nov  8 15:17:06 2010 GONG-YI LIAO
+%% Last update Tue Nov  9 22:24:15 2010 GONG-YI LIAO
 %%
 
 \documentclass[twoside,12pt]{amsart}
@@ -33,14 +33,47 @@
 
 \begin{enumerate}
 \item
-  Consider the model that $(N_{j1}, N_{j2}, N_{j3})'\sim\mathcal
-  Multinomial(\bm p_j, N)$, $j=1,2$, $\bm p_j = (p_{j1}, p_{j2},
+  Consider the model that $(Y_{j1}, Y_{j2}, Y_{j3})'\sim\mathcal
+  Multinomial(\bm p_j, \sum_{i=1}^3y_{ji})$, $j=1,2$, $\bm p_j = (p_{j1}, p_{j2},
   p_{j3})'$, $\sum_{i=1}^3p_{ji} = 1$. Apparently $\alpha_j =
   \frac{p_{j1}}{p_{j1}+p_{j2}}$, 
   where $p_{j1}$ denotes the probability that people prefer Bush at
   poll time $j$, , $p_{j2}$ denotes the probability that peoples
   prefer Dukakis at time $j$ and $p_{j3}$ denotes the probabiltiy that
   neither candidates are not preferred by the people. 
+
+  We assume that $\bm p$ has a Dirichlet distribution with parameters
+  $\bm\xi = (\xi_1, \xi_2, \xi_3)'$, all $\xi$'s are
+  all non-negative real numbers.
+  Now, with this prior setting, we have the form:
+  \[
+  \mathscr P(\bm y_j, \bm p|\bm\xi) =
+  \frac{\Gamma\left(\sum_{i=1}^3y_{ji}+1\right)\Gamma\left(\sum_{i=1}^3\xi_i\right)}{\prod_{i=1}^3\Gamma(y_{ji}+1)\cdot\Gamma(\xi_i)}\prod_{i=1}^3p_i^{y_{ji} + \xi_i}
+  \]
+  and thus
+  \[
+  \mathscr P(\bm y_j|\bm\xi) = 
+  \frac{\Gamma\left(\sum_{i=1}^3y_{ji}+1\right)\Gamma\left(\sum_{i=1}^3\xi_i\right)\prod_{i=1}^3\Gamma(y_{ji}+\xi_i)}
+  {\prod_{i=1}^3\left[\Gamma(y_{ji}+1)\cdot\Gamma(\xi_i)\right]\Gamma\left(\sum_{i=1}^3y_{ji}+\xi_i\right)}\times
+  \]
+  \[
+  \int_{\bm p\in (0,1)^3, \sum_{i=1}^3 p_i=1}
+  \frac{\Gamma\left(\sum_{i=1}^3y_{ji}+\xi_i\right)}{\prod_{i=1}^3\Gamma(y_{ji}+\xi_i)}
+  \prod_{i=1}^3p_i^{y_{ji} + \xi_i}d\bm p
+  \]
+  \[
+  =\frac{\Gamma\left(\sum_{i=1}^3y_{ji}+1\right)\Gamma\left(\sum_{i=1}^3\xi_i\right)\prod_{i=1}^3\Gamma(y_{ji}+\xi_i)}
+  {\prod_{i=1}^3\left[\Gamma(y_{ji}+1)\cdot\Gamma(\xi_i)\right]\Gamma\left(\sum_{i=1}^3y_{ji}+\xi_i\right)}
+  \]
+  and so
+  \[
+  \mathscr P(\bm p|\bm y_j,\bm\xi) =   \frac{\Gamma\left(\sum_{i=1}^3y_{ji}+\xi_i\right)}{\prod_{i=1}^3\Gamma(y_{ji}+\xi_i)}
+  \prod_{i=1}^3p_i^{y_{ji} + \xi_i}
+  \]
+  Now, a problem raise, if we utilize Dirichlet Distribution, what
+  value of $\bm\xi$ we should choose? 
+
+  
   
 \item
 \item
