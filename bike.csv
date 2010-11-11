@@ -1,0 +1,61 @@
+"type","bike.route","bicycles","vehicles"
+"Residential",TRUE,16,58
+"Residential",TRUE,9,90
+"Residential",TRUE,10,48
+"Residential",TRUE,13,57
+"Residential",TRUE,19,103
+"Residential",TRUE,20,57
+"Residential",TRUE,18,86
+"Residential",TRUE,17,112
+"Residential",TRUE,35,273
+"Residential",TRUE,55,64
+"Residential",FALSE,12,113
+"Residential",FALSE,1,18
+"Residential",FALSE,2,14
+"Residential",FALSE,4,44
+"Residential",FALSE,9,208
+"Residential",FALSE,7,67
+"Residential",FALSE,9,29
+"Residential",FALSE,8,154
+"Residential",FALSE,NA,NA
+"Residential",FALSE,NA,NA
+"Fairly busy",TRUE,8,29
+"Fairly busy",TRUE,35,415
+"Fairly busy",TRUE,31,425
+"Fairly busy",TRUE,19,42
+"Fairly busy",TRUE,38,180
+"Fairly busy",TRUE,47,675
+"Fairly busy",TRUE,44,620
+"Fairly busy",TRUE,44,437
+"Fairly busy",TRUE,29,47
+"Fairly busy",TRUE,18,462
+"Fairly busy",FALSE,10,557
+"Fairly busy",FALSE,43,1258
+"Fairly busy",FALSE,5,499
+"Fairly busy",FALSE,14,601
+"Fairly busy",FALSE,58,1163
+"Fairly busy",FALSE,15,700
+"Fairly busy",FALSE,0,90
+"Fairly busy",FALSE,47,1093
+"Fairly busy",FALSE,51,1459
+"Fairly busy",FALSE,32,1086
+"Busy",TRUE,60,1545
+"Busy",TRUE,51,1499
+"Busy",TRUE,58,1598
+"Busy",TRUE,59,503
+"Busy",TRUE,53,407
+"Busy",TRUE,68,1494
+"Busy",TRUE,68,1558
+"Busy",TRUE,60,1706
+"Busy",TRUE,71,476
+"Busy",TRUE,63,752
+"Busy",FALSE,8,1248
+"Busy",FALSE,9,1246
+"Busy",FALSE,6,1596
+"Busy",FALSE,9,1765
+"Busy",FALSE,19,1290
+"Busy",FALSE,61,2498
+"Busy",FALSE,31,2346
+"Busy",FALSE,75,3101
+"Busy",FALSE,14,1918
+"Busy",FALSE,25,2318

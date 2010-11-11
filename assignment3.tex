@@ -5,7 +5,7 @@
 %% Login   <gong-yi@GongTop>
 %% 
 %% Started on  Sat Nov  6 17:57:05 2010 GONG-YI LIAO
-%% Last update Tue Nov  9 22:24:15 2010 GONG-YI LIAO
+%% Last update Wed Nov 10 20:12:12 2010 GONG-YI LIAO
 %%
 
 \documentclass[twoside,12pt]{amsart}
@@ -72,10 +72,36 @@
   \]
   Now, a problem raise, if we utilize Dirichlet Distribution, what
   value of $\bm\xi$ we should choose? 
+  
 
-  
-  
+  Since we assume (?) that we treat the data {\em subjectively}, so,
+  we use $\bm\xi_0 = (1,1,1)'$ as the prior parameter, thus, we have
+   \[
+    \mathscr P(\bm p|\bm y_j,\bm\xi_0) =
+    \frac{\Gamma\left(\sum_{i=1}^3y_{ji} +1\right)}{\prod_{i=1}^3\Gamma(y_{ji}+1)}
+  \prod_{i=1}^3p_i^{y_{ji} + \xi_i}
+   \]
+   thus, $\bm p_1|\bm y_1, \bm\xi_0\sim\text{Dirichlet}(295, 308,
+   39)$ and $\bm p_2|\bm y_2, \bm\xi_0\sim\text{Dirichlet}(289, 333,
+   20)$. Thus, we can generate the samples of $\bm p_j$ from the
+   corresponding posterior distributions and compute $\alpha_j$'s then
+   plot their difference. The plot is shown in Fig.\ref{fig:1-1}
+   \begin{figure}[h]
+        \includegraphics[scale=.5]{1-1.pdf}
+        \caption{The density of $\alpha_2 - \alpha_1$}\label{fig:1-1}
+      \end{figure}
 \item
+  \begin{enumerate}
+  \item
+    We can assume that $y_1, y_2, \ldots, y_{10}$ are {\em i.i.d.}
+    beta random variables with parameter $\bm\theta_y = (\kappa_y, \omega_y)$;
+    and $z_1, z_2,\ldots, z_8$ are {\em i.i.d.} beta random variables
+    with parameter $\bm\theta_z = (\kappa_z, \omega_z)$.
+  \item
+    
+  \item
+  \item
+  \end{enumerate}
 \item
 \item
   \begin{enumerate}
@@ -94,7 +120,7 @@ y    \mathscr P(\bm y) =
     \]
 
     The corresponding {\tt R} code are:
-
+    
     \begin{small}
     \begin{verbatim}
 
