@@ -1,4 +1,4 @@
-## Last update Wed Nov 10 20:05:05 2010 GONG-YI LIAO
+## Last update Fri Nov 12 18:35:47 2010 GONG-YI LIAO
 
 require(MCMCpack)
 require(arm)
@@ -47,8 +47,62 @@ rm(ξ, α.1, α.2, π.1, π.2, y1, y2)
 
 bike.data <- read.csv('bike.csv', header=TRUE)
 
+
 y1 <- bike.data[1:10,3]/rowSums(bike.data[1:10, 3:4])
 z1 <- bike.data[11:18,3]/rowSums(bike.data[11:18, 3:4])
+
+
+data.3.1.y <- list(y=y1, N=10, p1=.5, r1=10, p2=.5, r2=1000)
+
+data.3.1.z <- list(y=z1, N=8, p1= .5, r1=10, p2=.5, r2=1000)
+
+jags.3.1.y <- jags(data=data.3.1.y, inits=list("alpha"=rnegbin(1, 30, theta=1), "beta"=rnegbin(1, 700, theta=1)),
+                   parameters.to.save=c("alpha", "beta"), model.file="2-1-1.bug",
+                   n.iter=1000, n.chains=2)
+
+jags.3.1.z <- jags(data=data.3.1.z, inits=list("alpha"=rnegbin(1, 30, theta=1), "beta"=rnegbin(1, 700, theta=1)),
+                   parameters.to.save=c("alpha", "beta"), model.file="2-1-1.bug",
+                   n.iter=1000, n.chains=2)
+
+
+gelman.diag(as.mcmc(jags.3.1.y))
+geweke.diag(as.mcmc(jags.3.1.y))
+plot(as.mcmc(jags.3.1.y))
+
+
+gelman.diag(as.mcmc(jags.3.1.z))
+geweke.diag(as.mcmc(jags.3.1.z))
+plot(as.mcmc(jags.3.1.z))
+
+
+## second approach of modeling
+
+y1.logit <- as.numeric(logit(y1))
+z1.logit <- logit(z1)
+  
+data.3.2.y <- list(y=y1.logit, mu0=0, alpha0=3, beta0=1, tau2=2, N=10)
+data.3.2.z <- list(y=z1.logit, mu0=0, alpha0=3, beta0=1, tau2=2, N=8)
+
+inits.1 <- function() {
+  list("mu"=rnorm(1), "invsgm2"=rinvgamma(1,3,1))
+}
+
+jags.3.2.y <- jags(data=data.3.2.y, inits=inits.1, 
+                   parameters.to.save=c("mu", "sgm2"),
+                   model.file="3-2.bug", n.iter=1000, n.chains=2)
+
+gelman.diag(as.mcmc(jags.3.2.y))
+geweke.diag(as.mcmc(jags.3.2.y))
+xyplot(as.mcmc(jags.3.2.y))
+
+jags.3.2.z <- jags(data=data.3.2.y, inits=inits.1, 
+                   parameters.to.save=c("mu", "sgm2"),
+                   model.file="3-2.bug", n.iter=1000, n.chains=2)
+
+gelman.diag(as.mcmc(jags.3.2.z))
+geweke.diag(as.mcmc(jags.3.2.z))
+xyplot(as.mcmc(jags.3.2.z))
+
 
 
 

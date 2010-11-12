@@ -1,0 +1,7 @@
+model {
+   for (i in 1:N) {
+    y[i] ~ dbeta(alpha, beta)
+   }
+   alpha ~ dnegbin(p1, r1)
+   beta ~ dnegbin(p2, r2)
+}

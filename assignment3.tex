@@ -5,10 +5,10 @@
 %% Login   <gong-yi@GongTop>
 %% 
 %% Started on  Sat Nov  6 17:57:05 2010 GONG-YI LIAO
-%% Last update Wed Nov 10 20:12:12 2010 GONG-YI LIAO
+%% Last update Fri Nov 12 18:49:59 2010 GONG-YI LIAO
 %%
 
-\documentclass[twoside,12pt]{amsart}
+\documentclass[twoside,11pt]{amsart}
 
 \usepackage{bm,amssymb,amsmath}
 \usepackage{mathrsfs}
@@ -93,14 +93,240 @@
 \item
   \begin{enumerate}
   \item
-    We can assume that $y_1, y_2, \ldots, y_{10}$ are {\em i.i.d.}
-    beta random variables with parameter $\bm\theta_y = (\kappa_y, \omega_y)$;
-    and $z_1, z_2,\ldots, z_8$ are {\em i.i.d.} beta random variables
-    with parameter $\bm\theta_z = (\kappa_z, \omega_z)$.
-  \item
+    Assume that $y_i\overset{\text{\em i.i.d.}}{\sim}Beta(\alpha_y,
+    \beta_y)$ with parameter $\bm\theta_y = (\alpha_y,
+    \beta_y)$ and similarly, $z_i\overset{\text{\em i.i.d.}}{\sim}Beta(\alpha_z,
+    \beta_z)$ with parameter $\bm\theta_z = (\alpha_z,
+    \beta_z)$.
+
+    % \begin{enumerate}
+    % \item\label{2-mod-1} For the simple case,
+    % we can assume that $y_1, y_2, \ldots, y_{10}$ are {\em i.i.d.}
+    % uniform random variables with upper bound parameter $\bm\theta_y =
+    % \mathcal U_y$ and lower bound $0$;
+    % and $z_1, z_2,\ldots, z_8$ are {\em i.i.d.} uniform random variables
+    % with upper bound parameter $\bm\theta_z = \mathcal U_z)$ and lower
+    % bound 0. In summary,
+    % \[
+    % Y_i\overset{\text{\em i.i.d.}}{\sim} Unif(0, \mathcal U_y)
+    % \]
+    % and
+    % \[
+    % Z_i\overset{\text{\em i.i.d.}}{\sim} Unif(0, \mathcal U_z)
+    % \] 
+    % \item\label{2-mod-2} 
+    %   Another sightly complicated approache is logit-normal
+    %   distribution,
+    %   we assume that 
+    %   \[
+    %   T_i = \log\left(\frac{Y_i}{1-Y_i}\right)\overset{\text{\em
+    %       i.i.d.}}{\sim}\mathcal N(\mu_y, \sigma_y^2)
+    %   \]
+    %   where $\bm\theta_y = (\mu_y, \sigma_y^2)'$ and
+    %   \[
+    %   \log\left(\frac{z_i}{1-z_i}\right)\overset{\text{\em
+    %       i.i.d.}}{\sim}\mathcal N(\mu_z, \sigma_z^2)
+    %   \]
+    %   where $\bm\theta_z = (\mu_z, \sigma_z^2)'$
+    % \end{enumerate}
+  \item    
+    Assume that $\alpha_y, \alpha_z \overset{\text{\em i.i.d.}}{\sim}
+    Negative Binomial(\xi, r_1)$ and $\beta_y, \beta_z \overset{\text{\em i.i.d.}}{\sim}
+    Nagative Bionmial(\psi, r_2)$.
+    Thus, 
+    \[
+    \mathscr P(\bm y, \alpha_y, \beta_y) = \left[\frac{(\alpha_y+r-1)!}{\alpha_y!(r_1-1)!}\frac{(\beta_2+r_2-1)!}{\beta_y!(r_2-1)!}(1-\xi)^{r_1}(1-\psi)^{r_2}\prod_{i=1}^{N_y}\frac{\Gamma(\alpha_y+\beta_y)y_i}{\Gamma(\alpha_y)\Gamma(\beta_y)(1-y_i)}\right]
+    \times\]
+    \[
+\left[\prod_{i=1}^{N_y}y_i\xi\right]^{\alpha_y}\left[\prod_{i=1}^{N_y}(1-y_i)\psi\right]^{\beta_y}
+    \]
     
+    similarly,
+    \[
+    \mathscr P(\bm z, \alpha_z, \beta_z) =
+    \left[\frac{(\alpha_y+r-1)!}{\alpha_y!(r_1-1)!}\frac{(\beta_2+r_2-1)!}{\beta_y!(r_2-1)!}(1-\xi)^{r_1}(1-\psi)^{r_2}\prod_{i=1}^{N_z}\frac{\Gamma(\alpha_z+\beta_z)z_i}{\Gamma(\alpha_z)\Gamma(\beta_z)(1-z_i)}\right]
+    \times\]
+    \[
+    \left[\prod_{i=1}^{N_z}z_i\xi\right]^{\alpha_z}\left[\prod_{i=1}^{N_z}(1-z_i)\psi\right]^{\beta_z}
+    \]
+
+    Note: all parameters (not meta-parameters) are independent.
+
+    The reasons to use this approach:    
+    \begin{itemize}
+      \item Fits $y_i$'s principle characteristic: they are proportion
+        of a integer to its sum with another integer, negative binomial
+        distribution's support can satifies this well.
+      % \item The reason that I choose the support as $\mathbb N^+$
+      %   rather than $\{0\}\cup\mathbb N^+$ is to avoid the case that
+      %   $\frac{0}{0+0}$.
+    \end{itemize}
+    % \begin{enumerate}
+    % \item For the first case in \ref{2-mod-1}, 
+    %   We can assume $\mathcal U_y\sim\Gamma(\alpha, \beta)$ and 
+    %   $\mathcal U_z\sim\Gamma(\alpha, \beta)$ and they are
+    %   independent.
+      
+    %   For this simpler case, we have, $\mathcal U_y\sim\Gamma(\alpha
+    %   -N, \beta)$ where $N$ is the sample size of $Y$, $\mathcal U_z$
+    %   follows the similar property.
+
+    % \item For the first case in \ref{2-mod-2}, 
+    %   we can assume that d $\mu_y\sim\mathcal N(\mu_0, \sigma_0^2)$ and
+    %   $\sigma_0^2\sim \Gamma^{-1}(3,1)$; $\mu_z\sim\mathcal N(\mu_1, \sigma_1^2)$
+    %   $\mu_y\sim\mathcal N(\mu_1, \sigma_1^2)$ , $\sigma_1^2\sim
+    %   \Gamma^{-1}(3,1)$ 
+    % \end{enumerate}
   \item
+    We know that
+    \[
+    \mathscr P(\bm y) = \sum_{\alpha_y=1}^\infty\sum_{\beta_y=1}^\infty\mathscr P(\bm y, \alpha_y, \beta_y)
+    \]
+    \[=
+    \left[\xi^{r_1}\psi^{r_2}\prod_{i=1}^{N_y}\frac{\Gamma(\alpha_y+\beta_y)y_i}{\Gamma(\alpha_y)\Gamma(\beta_y)(1-y_i)}\right]
+    \times \]
+    \[
+    \left[1-\prod_{i=1}^{N_y}y_i\xi\right]^{-r_1}\left[1-\prod_{i=1}^{N_y}(1-y_i)\psi\right]^{-r_2}
+    \]
+    we have
+    \[
+    \mathscr P(\alpha_y, \beta_y|\bm y) =
+    \frac{(\alpha_y+r-1)!}{\alpha_y!(r_1-1)!}
+    \left[\prod_{i=1}^{N_y}y_i\xi\right]^{\alpha_y}\left[1-\prod_{i=1}^{N_y}y_i\xi\right]^{r_1}\times
+    \]
+    \[
+    \frac{(\beta_y+r_2-1)!}{\beta_y!(r_2-1)!}
+    \left[\prod_{i=1}^{N_y}(1-y_i)\psi\right]^{\beta_y}\left[1-\prod_{i=1}^{N_y}(1-y_i)\psi\right]^{r_2}
+    \]
+    
+    which is a product of two independent geometric random variables'
+    probability mass function. Similarly, 
+    \[
+    \mathscr P(\alpha_z, \beta_z|\bm z) =
+    \frac{(\alpha_z+r-1)!}{\alpha_z!(r_1-1)!}
+    \left[\prod_{i=1}^{N_z}z_i\xi\right]^{\alpha_z}\left[1-\prod_{i=1}^{N_z}z_i\xi\right]^{r_1}\times
+    \]
+    \[
+        \frac{(\beta_z+r_2-1)!}{\beta_z!(r_2-1)!}
+    \left[\prod_{i=1}^{N_z}(1-z_i)\psi\right]^{\beta_z}\left[1-\prod_{i=1}^{N_z}(1-z_i)\psi\right]^{r_2}
+    \]    
+
+    For convenience, we assume that $\xi = .5$, $\psi = .5$, $r_1=10$,
+    $r_2=1000$ (they are arbitrarily picked), thus, 
+    
+    \begin{verbatim}
+> jags.3.1.y <- jags(data=data.3.1.y, inits=list("alpha"=rnegbin(1, 30, theta=1), "beta"=rnegbin(1, 700, theta=1)),
++                    parameters.to.save=c("alpha", "beta"), model.file="2-1-1.bug",
++                    n.iter=1000, n.chains=2)
+Compiling model graph
+   Resolving undeclared variables
+   Allocating nodes
+   Graph Size: 17
+
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
+  |**************************************************| 100%
+> geweke.diag(as.mcmc(jags.3.1.y))
+[[1]]
+
+Fraction in 1st window = 0.1
+Fraction in 2nd window = 0.5 
+
+   alpha     beta deviance 
+  -1.394   -1.350   -1.380 
+
+
+[[2]]
+
+Fraction in 1st window = 0.1
+Fraction in 2nd window = 0.5 
+
+   alpha     beta deviance 
+  0.1819   0.5033   0.5937 
+
+
+> gelman.diag(as.mcmc(jags.3.1.y))
+Potential scale reduction factors:
+
+         Point est. 97.5% quantile
+alpha          1.03           1.04
+beta           1.04           1.04
+deviance       1.03           1.03
+
+Multivariate psrf
+1.00
+
+> jags.3.1.z <- jags(data=data.3.1.z, inits=list("alpha"=rnegbin(1, 30, theta=1), "beta"=rnegbin(1, 700, theta=1)),
++                    parameters.to.save=c("alpha", "beta"), model.file="2-1-1.bug",
++                    n.iter=1000, n.chains=2)
+Compiling model graph
+   Resolving undeclared variables
+   Allocating nodes
+   Graph Size: 15
+
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
+  |**************************************************| 100%
+> 
+> gelman.diag(as.mcmc(jags.3.1.z))
+Potential scale reduction factors:
+
+         Point est. 97.5% quantile
+alpha          1.02           1.09
+beta           1.02           1.12
+deviance       1.02           1.09
+
+Multivariate psrf
+
+1.02
+> geweke.diag(as.mcmc(jags.3.1.z))
+[[1]]
+
+Fraction in 1st window = 0.1
+Fraction in 2nd window = 0.5 
+
+   alpha     beta deviance 
+  1.3633   0.7820   0.4029 
+
+
+[[2]]
+
+Fraction in 1st window = 0.1
+Fraction in 2nd window = 0.5 
+
+   alpha     beta deviance 
+ -0.4858  -1.4689  -1.8225 
+\end{verbatim}
+    Both Gelman-Rubin and Geweke Diagonstic give us positive
+    conclusion on this approach.
+The distribution plots of $\alpha_y, \beta_y|\bm y$  and  $\alpha_y,
+\beta_y|\bm y$ are shown in 
+Fig.\ref{fig:2-1} and Fig.\ref{fig:2-2} Respectively.
+\begin{figure}[h]
+        \includegraphics[scale=.5]{2-1.pdf}
+        \caption{The traceplot of $\theta_y|\bm y$}\label{fig:2-1}
+      \end{figure}
+\begin{figure}[h]
+        \includegraphics[scale=.5]{2-2.pdf}
+        \caption{The traceplot of $\theta_z|\bm z$}\label{fig:2-2}
+      \end{figure}
+
+    % \begin{enumerate}
+    %   \item For model \ref{2-mod-1}, the plot is shown in ig.\ref{fig:3-1}
+    %   \item For model \ref{2-mod-2}, the plot is shown in Fig.\ref{fig:3-2}
+    % \end{enumerate}
   \item
+    Since $\mu_y = \frac{\alpha_y}{\alpha_y + \beta_y}$ and $\mu_z =
+    \frac{\alpha_z}{\alpha_z + \beta_z}$ 
+    we can easily have the histogram of $\mu_y-\mu_z$, which is shown
+    in Fig.\ref{fig:2-3}.
+    \begin{figure}[h]
+        \includegraphics[scale=.5]{2-3.pdf}
+        \caption{The traceplot of $\mu_y - \mu_z$}\label{fig:2-3}
+      \end{figure}    
+    
+    % \begin{enumerate}
+    %   \item For model \ref{2-mod-1}, the histogram is shown in ig.\ref{fig:3-3}
+    %   \item For model \ref{2-mod-2}, the histogram is shown in ig.\ref{fig:3-4}
+    % \end{enumerate}
   \end{enumerate}
 \item
 \item
@@ -119,8 +345,7 @@ y    \mathscr P(\bm y) =
     (\theta-y_i)^2]^{-1}d\theta}
     \]
 
-    The corresponding {\tt R} code are:
-    
+    The corresponding {\tt R} code are:    
     \begin{small}
     \begin{verbatim}
 
@@ -128,16 +353,8 @@ require(MCMCpack)
 require(arm)
 require(R2jags)
 
-## Q4
-
 post.inte.two.sample <- function(theta, obs) {
   def1 <- 1
-  ## the reason that we need to use the inefficient loop
-  ## is that the function integration needs the exact form
-  ## of the function, but, if we use "sum" or "prod" then the
-  ## exact form of function will be invisible to
-  ## the function "integration" and error will occur at the second
-  ## stage.
   for (i in 1:length(obs))
     def1 <- def1/(1+(theta - obs[i])^2)
   def1
@@ -156,8 +373,7 @@ logfun1 <- function(theta, obs) {
 
 post.mean.fun.1 <- function(theta, obs) {
   theta*post.two.sample.cauchy(theta, obs)
-}
-      
+}      
     \end{verbatim}
     \end{small}
   \item

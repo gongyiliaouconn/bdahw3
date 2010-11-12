@@ -1,0 +1,8 @@
+model {
+  for (i in 1:N) {
+    y[i] ~ dnorm(mu,sgm2)
+  }
+  mu ~ dnorm(mu0, tau2)
+  invsgm2 ~  dgamma(alpha0, beta0)	
+  sgm2 <- 1/invsgm2	    
+}

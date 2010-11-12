@@ -1,0 +1,6 @@
+model {
+   for (i in 1:N) {
+      y[i] ~ dunif(0, ub)
+   }
+   ub ~ dgamma(alpha, beta)
+}
