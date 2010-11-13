@@ -1,4 +1,4 @@
-## Last update Fri Nov 12 18:35:47 2010 GONG-YI LIAO
+## Last update Sat Nov 13 00:20:32 2010 GONG-YI LIAO
 
 require(MCMCpack)
 require(arm)
@@ -203,6 +203,57 @@ lines(density(post.sample.c.ii), col="blue", lty=2)
 dev.off()
 
 ## Q5, q11 on page 155, BDA textbook.
+
+y.Js <- bike.data[1:10,3]
+n.Js <- rowSums(bike.data[1:10, 3:4])
+
+αβ.lkhd <- function(α, β, ys=y.Js, ns=n.Js) {
+  ## usage:
+  ref.svl <- 0
+  for (j in 1:length(ys))
+    ref.svl <-ref.svl + ns[j]*log(2) + dbinom(ys[j], size=ns[j], prob=.5, log=TRUE)
+                      + lgamma(ys[j]+α) + lgamma(ns[j]-ys[j]+β) - lgamma(ns[j]+α+β)
+  ref.svl <- ref.svl + (lgamma(α+β)-lgamma(α)-lgamma(β))*length(ys)
+  ref.svl <- ref.svl - 2.5*log(α+β)
+  exp(ref.svl)
+}
+
+
+
+
+α.1 <- seq(.1, 10, length=1000)
+β.1 <- seq(.1, 30, length=1000)
+αβ.lkhd.val <- outer(α.1, β.1, "αβ.lkhd")
+
+pdf("5-1.pdf") 
+image(α.1, β.1, αβ.lkhd.val, col=heat.colors(10))
+contour(α.1, β.1, αβ.lkhd.val, col="brown", levels=seq(8*1E-20, 2*1E-19, by=1E-20), add=TRUE)
+dev.off()
+
+
+α.lkhd.marg <- function(α, β.seq, ys=y.Js, ns=n.Js) {
+  slice <- (max(β.seq) - min(β.seq))/length(β.seq)
+  for (i in 1:length(β.seq))
+    chop <- αβ.lkhd(α,β.seq[i], ys=ys, ns=ns)
+  chop <- slice*chop
+  chop
+}
+
+β.lkhd.marg <- function(α.seq, β, ys=y.Js, ns=n.Js) {
+  slice <- (max(α.seq) - min(α.seq))/length(α.seq)
+  for (i in 1:length(α.seq))
+    chop <- αβ.lkhd(α.seq[i], β, ys=ys, ns=ns)
+  chop <- slice*chop
+  chop
+}
+
+
+mar.α.numerical <- sapply(seq(.1, 12, length=200), "α.lkhd.marg" , β.seq=seq(.1, 24, length=1000))
+plot(seq(.1, 12, length=200), mar.α.numerical, type="l", col="blue", xlab=expression(alpha), ylab="marginal density")
+
+mar.β.numerical <- sapply(seq(.1, 24, length=800), "β.lkhd.marg" , α.seq=seq(.1, 6, length=200))
+plot(seq(.1, 30, length=400), mar.β.numerical, type="l", col="red", xlab=expression(beta), ylab="marginal density")
+
 
 
 

@@ -5,7 +5,7 @@
 %% Login   <gong-yi@GongTop>
 %% 
 %% Started on  Sat Nov  6 17:57:05 2010 GONG-YI LIAO
-%% Last update Fri Nov 12 18:49:59 2010 GONG-YI LIAO
+%% Last update Sat Nov 13 00:22:21 2010 GONG-YI LIAO
 %%
 
 \documentclass[twoside,11pt]{amsart}
@@ -329,6 +329,7 @@ Fig.\ref{fig:2-1} and Fig.\ref{fig:2-2} Respectively.
     % \end{enumerate}
   \end{enumerate}
 \item
+
 \item
   \begin{enumerate}
   \item The posterior density of $\theta$ is:
@@ -348,7 +349,6 @@ y    \mathscr P(\bm y) =
     The corresponding {\tt R} code are:    
     \begin{small}
     \begin{verbatim}
-
 require(MCMCpack)
 require(arm)
 require(R2jags)
@@ -460,9 +460,83 @@ The Metropolis acceptance rate was 0.80627
     \end{enumerate}
   \end{enumerate}
 \item
+  \begin{enumerate}
+  \item
+    Follow the rat tumor example setting:
+    \[
+    y_j \sim Bin(n_j, \theta_j)
+    \]
+    \[
+    \theta_j\sim Beta(\alpha, \beta)
+    \]
+    \[
+    p(\alpha, \beta)\propto (\alpha+\beta)^{-\frac{5}{2}}
+    \]
+    we have
+    \[
+    \mathscr P(\bm y, \bm\theta, \alpha, \beta) = \left[\prod_{j=1}^J
+    { n_j \choose y_j}\theta_j^{y_j}(1-\theta_j)^{n_j-y_j}\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\theta_j^{\alpha-1}(1-\theta_j)^{\beta-1}\right](\alpha+\beta)^{-\frac{5}{2}} 
+    \]
+   \[ =
+    \left[\prod_{j=1}^J{n_j \choose y_j}\theta_j^{y_j+\alpha-1}(1-\theta_j)^{n_j-y_j+\beta-1}\right]\left(\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\right)^{J}(\alpha+\beta)^{-\frac{5}{2}} 
+   \]
+   and thus
+   \[
+   \mathscr P(\alpha, \beta, \bm y) =
+   \int_0^1\int_0^1\cdots\int_0^1\left[\prod_{j=1}^J{n_j \choose
+       y_j}\theta_j^{y_j+\alpha-1}(1-\theta_j)^{n_j-y_j+\beta-1}\right]\left(\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\right)^{J}(\alpha+\beta)^{-\frac{5}{2}}
+   d\theta_1d\theta_2\cdots d\theta_J
+   \]
+   we have
+   \[
+   \mathscr P (\alpha, \beta|\bm y) \propto
+   (\alpha+\beta)^{-\frac{5}{2}}\left(\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\right)^{J}
+   \left[\prod_{j=1}^J{n_j \choose y_j}\frac{\Gamma(y_j+\alpha)\Gamma(n_j-y_j+\beta)}{\Gamma(n_j+\alpha+\beta)}\right]
+   \]
+  \item
+    The contour plot is shown in Fig.\ref{fig:5-1}
+    \begin{figure}[h]
+        \includegraphics[scale=.5]{5-1.pdf}
+        \caption{The contour plot of $\mathscr P(\alpha, \beta|\bm y)$}\label{fig:5-1}
+      \end{figure}
+  \item
+  \item
+  \item
+  \end{enumerate}
+  
 \end{enumerate}
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
