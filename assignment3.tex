@@ -5,7 +5,6 @@
 %% Login   <gong-yi@GongTop>
 %% 
 %% Started on  Sat Nov  6 17:57:05 2010 GONG-YI LIAO
-%% Last update Sun Nov 14 17:52:18 2010 GONG-YI LIAO
 %%
 
 \documentclass[twoside,11pt]{amsart}
@@ -213,9 +212,10 @@
 
     For convenience, we assume that $\xi = .5$, $\psi = .5$, $r_1=10$,
     $r_2=1000$ (they are arbitrarily picked), thus, 
-    
+    \begin{small}
     \begin{verbatim}
-> jags.3.1.y <- jags(data=data.3.1.y, inits=list("alpha"=rnegbin(1, 30, theta=1), "beta"=rnegbin(1, 700, theta=1)),
+> jags.3.1.y <- jags(data=data.3.1.y, inits=list("alpha"=rnegbin(1, 30, theta=1), 
++                    "beta"=rnegbin(1, 700, theta=1)),
 +                    parameters.to.save=c("alpha", "beta"), model.file="2-1-1.bug",
 +                    n.iter=1000, n.chains=2)
 Compiling model graph
@@ -255,7 +255,8 @@ deviance       1.03           1.03
 Multivariate psrf
 1.00
 
-> jags.3.1.z <- jags(data=data.3.1.z, inits=list("alpha"=rnegbin(1, 30, theta=1), "beta"=rnegbin(1, 700, theta=1)),
+> jags.3.1.z <- jags(data=data.3.1.z, inits=list("alpha"=rnegbin(1, 30, theta=1), 
++                    "beta"=rnegbin(1, 700, theta=1)),
 +                    parameters.to.save=c("alpha", "beta"), model.file="2-1-1.bug",
 +                    n.iter=1000, n.chains=2)
 Compiling model graph
@@ -295,6 +296,7 @@ Fraction in 2nd window = 0.5
    alpha     beta deviance 
  -0.4858  -1.4689  -1.8225 
 \end{verbatim}
+\end{small}
     Both Gelman-Rubin and Geweke Diagonstic give us positive
     conclusion on this approach.
 The distribution plots of $\alpha_y, \beta_y|\bm y$  and  $\alpha_y,
@@ -398,6 +400,7 @@ post.mean.fun.1 <- function(theta, obs) {
     \item
       By using {\tt R}'s {\tt MCMCpack}'s {\tt MCMCMetrop1R} function,
       we can obtain the posterior samples of $\theta$:      
+      \begin{small}
       \begin{verbatim}
 > ## Metropolis-Hasting sampled θ for y = (1.5, 2.5)
 > post.sample.b.ii <- MCMCmetrop1R(logfun1, theta.init=rnorm(1), 
@@ -420,6 +423,7 @@ The Metropolis acceptance rate was 0.72894
 [1] 2
 >         
       \end{verbatim}
+      \end{small}
       where the MCMC mean is $2.002400$ and numerical mean is $2$.
     \item
     \end{enumerate}
@@ -434,6 +438,7 @@ The Metropolis acceptance rate was 0.72894
     \item
       We can obtain the MCMC and numerical result by using following
       {\tt R} commands
+      \begin{small}
       \begin{verbatim}
 > post.sample.c.ii <- MCMCmetrop1R(logfun1, theta.init=rnorm(1), 
 +                                  obs=c(-3, -2, 1.5, 2.5),
@@ -454,6 +459,7 @@ The Metropolis acceptance rate was 0.80627
 [1] -0.25
 >         
     \end{verbatim}
+      \end{small}
       where the MCMC mean is $-0.2505891$, the numerical mean is $-0.25$.
     \item
     \item
@@ -502,7 +508,9 @@ The Metropolis acceptance rate was 0.80627
   \item
     
   \item
+
   \item
+
   \end{enumerate}
   
 \end{enumerate}
