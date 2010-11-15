@@ -1,4 +1,4 @@
-## Last update Sat Nov 13 00:20:32 2010 GONG-YI LIAO
+## Last update Mon Nov 15 06:22:30 2010 GONG-YI LIAO
 
 require(MCMCpack)
 require(arm)
@@ -207,54 +207,120 @@ dev.off()
 y.Js <- bike.data[1:10,3]
 n.Js <- rowSums(bike.data[1:10, 3:4])
 
-αβ.lkhd <- function(α, β, ys=y.Js, ns=n.Js) {
+αβ.lkhd <- function(α, β, ys=y.Js, ns=n.Js, takeLog=TRUE) {
   ## usage:
   ref.svl <- 0
   for (j in 1:length(ys))
-    ref.svl <-ref.svl + ns[j]*log(2) + dbinom(ys[j], size=ns[j], prob=.5, log=TRUE)
-                      + lgamma(ys[j]+α) + lgamma(ns[j]-ys[j]+β) - lgamma(ns[j]+α+β)
+    ref.svl <-ref.svl + lgamma(ys[j]+α) + lgamma(ns[j]-ys[j]+β) - lgamma(ns[j]+α+β)
   ref.svl <- ref.svl + (lgamma(α+β)-lgamma(α)-lgamma(β))*length(ys)
   ref.svl <- ref.svl - 2.5*log(α+β)
-  exp(ref.svl)
+  if (takeLog)
+    lkhd <- ref.svl
+  else
+    lkhd <- exp(ref.svl)
+  return(lkhd)
+}
+
+αβ.lkhd.forMCMC <- function(beta, ys=y.Js, ns=n.Js) {
+  α <- abs(beta[1])
+  β <- abs(beta[2])
+  dent <- αβ.lkhd(α, β, ys=ys, ns=ns, takeLog=TRUE) 
+  return(dent)
 }
 
 
+post.sample.αβ <- MCMCmetrop1R(αβ.lkhd.forMCMC, theta.init=abs(rnorm(2)),
+                               thin=1, mcmc=1200, burnin=200, logfun=TRUE)
 
+post.sample.αβ1 <- as.matrix(post.sample.αβ)[201:1200,]
+
+post.sample.mcmc.α <- abs(post.sample.αβ1[,1])
+post.sample.mcmc.β <- abs(post.sample.αβ1[,2])
 
 α.1 <- seq(.1, 10, length=1000)
 β.1 <- seq(.1, 30, length=1000)
-αβ.lkhd.val <- outer(α.1, β.1, "αβ.lkhd")
+αβ.lkhd.val <- outer(α.1, β.1, "αβ.lkhd") 
 
 pdf("5-1.pdf") 
-image(α.1, β.1, αβ.lkhd.val, col=heat.colors(10))
-contour(α.1, β.1, αβ.lkhd.val, col="brown", levels=seq(8*1E-20, 2*1E-19, by=1E-20), add=TRUE)
+image(α.1, β.1, exp(αβ.lkhd.val+ 250), col=heat.colors(10))
+contour(α.1, β.1, exp(αβ.lkhd.val+250), col="brown", nlevels=8, add=TRUE)
+dev.off()
+
+α.lkhd.marg <- function(α, β.seq, ys=y.Js, ns=n.Js, takeLog=FALSE) {
+  chop <- 0
+  slice <- (max(β.seq) - min(β.seq))/length(β.seq)
+  for (i in 1:length(β.seq))
+    chop <- chop + αβ.lkhd(α,β.seq[i], ys=ys, ns=ns, takeLog=FALSE)*slice 
+  if (takeLog)
+    dent <- log(chop)
+  else
+    dent <- chop
+  dent
+}
+
+
+β.lkhd.marg <- function(α.seq, β, ys=y.Js, ns=n.Js, takeLog=FALSE) {
+  chop <- 0
+  slice <- (max(α.seq) - min(α.seq))/length(α.seq)
+  for (i in 1:length(α.seq))
+    chop <- chop + αβ.lkhd(α.seq[i], β, ys=ys, ns=ns, takeLog=FALSE)*slice
+
+  if (takeLog)
+    dent <- log(chop)
+  else
+    dent <- chop
+  dent
+}
+
+
+mar.α.numerical <- sapply(seq(.1, 12, length=400), "α.lkhd.marg" , β.seq=seq(.1, 30, length=1500))
+mar.β.numerical <- sapply(seq(.1, 30, length=800), "β.lkhd.marg" , α.seq=seq(.1, 12, length=600))
+
+pdf('5-2.pdf', height=4, width=8)
+par(mfrow=c(1,2))
+plot(seq(.1, 30, length=800), mar.β.numerical, type="l", col="red",
+     ylab="nyumerical marginal density", xlab=expression('support of ' * alpha * ',' * beta),
+     ylim=c(1e-240, 1.291506e-232), main="numerical marginal density")
+lines(seq(.1, 12, length=400), mar.α.numerical, type="l", col="blue")
+legend(20, 1.2e-232, expression(beta, alpha), fill=c("red", "blue"))
+plot(
+## density(abs(post.sample.αβ[201:1200,1])),
+     density(post.sample.mcmc.α),
+     type="l", col="blue", xlim=c(0, 30),
+     ylab="estimated marginal density", xlab=expression('sampled ' * alpha * ',' * beta),
+     main="MCMC maginal density")
+lines(
+      density(post.sample.mcmc.β),
+      ## density(abs(post.sample.αβ[201:1200,2]))
+      , col="red")
+legend(20, 0.22, expression(beta, alpha), fill=c("red", "blue"))
+dev.off()
+
+## Q5 (c)
+
+θ.sims <- matrix(NA, nrow=1000, ncol=10)
+
+for (j in 1:10)
+  for (i in 1:1000) 
+    θ.sims[i,j] <- rbeta(1, post.sample.mcmc.α[i]+y.Js[j], post.sample.mcmc.β[i]+n.Js[j]-y.Js[j])
+
+pdf("5-3.pdf")
+plot(density(θ.sims[,1]), type="l", col=2, xlim=c(0,1), ylim=c(0,16),
+     main=expression('posterior density of ' * theta),
+     ylab="density", xlab="bicycle proportion")
+for (i in 2:10)
+    lines(density(θ.sims[,i]), col=i+1)
+legend(0.8, 10, 1:10, fill=1:10)
 dev.off()
 
 
-α.lkhd.marg <- function(α, β.seq, ys=y.Js, ns=n.Js) {
-  slice <- (max(β.seq) - min(β.seq))/length(β.seq)
-  for (i in 1:length(β.seq))
-    chop <- αβ.lkhd(α,β.seq[i], ys=ys, ns=ns)
-  chop <- slice*chop
-  chop
-}
+for (j in 1:10)
+  if (max(θ.sims[,j]) < y.Js[j]/n.Js[j] | min(θ.sims[,j]) > y.Js[j]/n.Js[j])
+  print (paste(j, "observed value not in the HPD"))
+  
 
-β.lkhd.marg <- function(α.seq, β, ys=y.Js, ns=n.Js) {
-  slice <- (max(α.seq) - min(α.seq))/length(α.seq)
-  for (i in 1:length(α.seq))
-    chop <- αβ.lkhd(α.seq[i], β, ys=ys, ns=ns)
-  chop <- slice*chop
-  chop
-}
-
-
-mar.α.numerical <- sapply(seq(.1, 12, length=200), "α.lkhd.marg" , β.seq=seq(.1, 24, length=1000))
-plot(seq(.1, 12, length=200), mar.α.numerical, type="l", col="blue", xlab=expression(alpha), ylab="marginal density")
-
-mar.β.numerical <- sapply(seq(.1, 24, length=800), "β.lkhd.marg" , α.seq=seq(.1, 6, length=200))
-plot(seq(.1, 30, length=400), mar.β.numerical, type="l", col="red", xlab=expression(beta), ylab="marginal density")
-
-
+## Q5 (d)
+print(quantile(rowMeans(θ.sims), c(0.025, 0.95)))
 
 
 

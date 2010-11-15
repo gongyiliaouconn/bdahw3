@@ -331,6 +331,18 @@ Fig.\ref{fig:2-1} and Fig.\ref{fig:2-2} Respectively.
     % \end{enumerate}
   \end{enumerate}
 \item
+  \begin{enumerate}
+  \item
+    
+  \item
+  \item
+  \item
+  \item
+  \item
+  \item
+  \item
+  \item
+  \end{enumerate}
 
 \item
   \begin{enumerate}
@@ -497,18 +509,56 @@ The Metropolis acceptance rate was 0.80627
    \[
    \mathscr P (\alpha, \beta|\bm y) \propto
    (\alpha+\beta)^{-\frac{5}{2}}\left(\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\right)^{J}
-   \left[\prod_{j=1}^J{n_j \choose y_j}\frac{\Gamma(y_j+\alpha)\Gamma(n_j-y_j+\beta)}{\Gamma(n_j+\alpha+\beta)}\right]
+   \left[\prod_{j=1}^J\frac{\Gamma(y_j+\alpha)\Gamma(n_j-y_j+\beta)}{\Gamma(n_j+\alpha+\beta)}\right]
    \]
   \item
     The contour plot is shown in Fig.\ref{fig:5-1}
     \begin{figure}[h]
         \includegraphics[scale=.5]{5-1.pdf}
-        \caption{The contour plot of $\mathscr P(\alpha, \beta|\bm y)$}\label{fig:5-1}
+        \caption{The contour plot of $P(\alpha, \beta|\bm y)$}\label{fig:5-1}
+      \end{figure}
+
+
+
+    The posterior density plot of $\alpha$ and $\beta$ and the MCMC
+    samples' density of the posterior distribution are shown in Fig.\ref{fig:5-2}
+    \begin{figure}[h]
+        \includegraphics[scale=.5]{5-2.pdf}
+        \caption{The marginal density plot of $\mathscr P(\alpha, \beta|\bm y)$}\label{fig:5-2}
       \end{figure}
   \item
-    
+    Following the suggestion from Gelman, we draw random samples from
+    joint posterior distribution $\mathscr P(\alpha, \beta,
+    \bm\theta|\bm y)$ with following density function:
+    \[\mathscr P(\alpha, \beta,
+    \bm\theta|\bm y)\propto 
+    (\alpha+\beta)^{-\frac{5}{2}}\prod_{j=1}^J\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\theta_j^{\alpha+y_j-1}(1-\theta_j)^{n_j-y_j+\beta-1}
+    \]
+    Fig.\ref{fig:5-3} shows the posterior density of $\theta_j$'s,
+    none of $\frac{y_j}{n_j}$ out of the boundaries of the estimated
+    distribution 95\% interval:
+    \begin{small}
+    \begin{verbatim}
+> for (j in 1:10)
++   if (max(θ.sims[,j]) < y.Js[j]/n.Js[j] | min(θ.sims[,j]) > y.Js[j]/n.Js[j])
++   print (paste(j, "observed value not in the HPD"))
+>   
+> 
+    \end{verbatim}
+    \end{small}
+    \begin{figure}[h]
+        \includegraphics[scale=.5]{5-3.pdf}
+        \caption{The posterior density plot of $\theta_j$'s}\label{fig:5-3}
+      \end{figure}
   \item
-
+    It simples using emprirical estimation:
+    \begin{verbatim}
+> print(quantile(rowMeans(θ.sims), c(0.025, 0.95)))
+     2.5%       95% 
+0.1731441 0.2172680       
+    \end{verbatim}
+  \item
+    
   \item
 
   \end{enumerate}
