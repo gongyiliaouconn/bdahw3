@@ -333,6 +333,16 @@ Fig.\ref{fig:2-1} and Fig.\ref{fig:2-2} Respectively.
 \item
   \begin{enumerate}
   \item
+    First, the model is  $N_i\sim~ Poisson(\alpha + \beta t_i)$,
+    undering this setting, we have the constrain that $\alpha+\beta
+    t_i > 0$ for all $i = 1, \ldots, 10$. we have
+    $\frac{\alpha}{\beta} < -max(t_i)$.  
+    since,
+    \[
+    p(\bm y|\alpha, \beta, \bm t) = \prod_{i=1}^{10}\frac{(\alpha+\beta
+      t_i)^{-y_i}e^{\alpha+\beta t_i}}{y_i!} 
+    \]
+    thus, we 
     
   \item
   \item

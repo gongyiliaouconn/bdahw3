@@ -1,4 +1,4 @@
-## Last update Mon Nov 15 06:22:30 2010 GONG-YI LIAO
+## Last update Mon Nov 22 11:38:01 2010 GONG-YI LIAO
 
 require(MCMCpack)
 require(arm)
@@ -108,9 +108,19 @@ xyplot(as.mcmc(jags.3.2.z))
 
 ## Q3, q12 on
 
-dose.fatal <- data.frame(dose=c(-0.86, -0.30, -0.05, 0.73),
-                         anomials=rep(5,4),
-                         death=c(0, 1, 3, 5))
+## year <- 1976:1985
+## accident.fatal <- c(24, 25, 31, 31, 22, 21, 26,  20, 16, 22)
+## passenager.death <- c(734, 516, 754, 877, 814, 362, 764, 809, 223, 1066)
+## rate.death <- c(0.19, 0.12, 0.15, 0.16, 0.14, 0.06, 0.13, 0.13, 0.03, 0.15)
+## airline.death <- data.frame(year=year,
+##                             accident.fatal=accident.fatal,
+##                             passenager.death=passenager.death,
+##                             rate.death=rate.death)
+
+## write.csv(airline.death, file="airline_death.csv", row.names=FALSE)
+
+airline.death <- read.csv("airline_death.csv", header=TRUE)
+
 
 
 ## Q4, designed by Prof. Chen
